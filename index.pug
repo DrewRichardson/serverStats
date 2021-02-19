@@ -1,0 +1,31 @@
+doctype html
+// Just a shitty html file
+html
+    head
+        title Socket Communication
+        script(src="/socket.io/socket.io.js")
+    body
+        h1= "Valheim server stats"
+        p(id="cpuInfo")
+        table(id="memInfo" border="1px")
+            thead 
+                tr 
+                    th(id="FreeMemH") Free Mem
+                    th(id="TotalMemH") Total Mem
+                    th(id="Mem%h") Mem%
+                tr
+                    td(id="FreeMem" headers="free")
+                    td(id="TotalMem" headers="total")
+                    td(id="Mem%" headers="mem%")
+        script.
+            var socket = io.connect();
+            socket.on('data', function(data) {
+                //Replace JSON.stringify(data) with JSON.stringify(data.tag) to retrieve a specific value stored in your JSON data.
+                document.getElementById("cpuInfo").innerHTML = "CPU usage " + JSON.stringify(data.cpuInfo);
+                document.getElementById("FreeMem").innerHTML = data.memInfo.freeMem
+                document.getElementById("TotalMem").innerHTML = data.memInfo.totalMem
+                document.getElementById("Mem%").innerHTML = data.memInfo.memPercentage
+                
+                //- document.getElementById("memInfo").rows[1][1] = data.memInfo.totalMem;
+                //- document.getElementById("memInfo").rows[1][2] = data.memInfo.memPercentage;
+            });
